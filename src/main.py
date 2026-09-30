@@ -5,12 +5,16 @@ from load.pokemon_db import add_pokemon_to_db
 from utils.id_generator import generate_pokemon_id
 
 import logging
+from config.database import init_db
+from config.logging import setup_logging
 
 setup_logging()
 
 logger = logging.getLogger(__name__)
 
 def main():
+
+    init_db()
 
     logger.info("Starting Pokemon ETL pipeline")
     

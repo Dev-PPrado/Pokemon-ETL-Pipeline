@@ -1,6 +1,6 @@
 from config.database import SessionLocal
-from models import Pokemon
-from schemas import PokemonSchema
+from models.pokemon import Pokemon
+from schemas.pokemon import PokemonSchema
 
 import logging
 

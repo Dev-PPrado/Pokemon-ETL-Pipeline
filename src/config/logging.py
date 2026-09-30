@@ -2,7 +2,9 @@ import logging
 from pathlib import Path
 
 
-LOG_DIR = Path("logs")
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+LOG_DIR = PROJECT_ROOT / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 
 LOG_FILE = LOG_DIR / "pipeline.log"
@@ -14,7 +16,11 @@ def setup_logging():
         level=logging.INFO,
         format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
         handlers=[
-            logging.FileHandler(LOG_FILE, encoding="utf-8"),
+            logging.FileHandler(
+                LOG_FILE,
+                encoding="utf-8"
+            ),
             logging.StreamHandler()
         ],
+        force=True,
     )

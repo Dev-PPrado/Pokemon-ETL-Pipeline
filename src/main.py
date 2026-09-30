@@ -20,6 +20,8 @@ def main():
 
     while True:
 
+        logger.info("========== STARTING ITERATION ==========")
+
         try:
             pokemon_id = generate_pokemon_id()
 
@@ -43,6 +45,8 @@ def main():
         logger.info("Waiting 5 seconds before next execution")
 
         time.sleep(5)
+
+        logger.info("5 seconds elapsed")
 
 
 if __name__ == "__main__":

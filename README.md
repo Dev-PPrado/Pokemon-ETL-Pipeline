@@ -1,8 +1,8 @@
 # Pokemon ETL Pipeline
 
-## Sobre o projeto:
+## Sobre o projeto
 
-Este projeto consiste na implementação de um pipeline ETL utilizando a PokeAPI como fonte de dados e um banco de dados relacional como destino.
+Este projeto consiste na implementação de um pipeline ETL utilizando a PokeAPI como fonte de dados e SQLite como destino.
 
 O projeto foi desenvolvido como um exercício prático para treinar a construção de pipelines de dados seguindo uma estrutura organizada e próxima dos padrões utilizados em projetos profissionais de Engenharia de Dados.
 
@@ -32,7 +32,7 @@ Extract → Transform → Validate → Load
 
 A API foi escolhida como source para praticar um cenário comum em Engenharia de Dados, no qual os dados precisam ser consumidos através de uma interface externa antes de serem processados e armazenados.
 
-► Arquitetura:
+× Arquitetura:
 
 ![Pokemon ETL Pipeline](docs/pipeline.png)
 
@@ -62,29 +62,29 @@ O pipeline segue o fluxo:
                [ Load ]
                    |
                    v
-             PostgreSQL
+                 SQLite
 
 Cada etapa possui uma responsabilidade específica.
 
-► Extract:
+× Extract:
 
 Responsável pela comunicação com a API e obtenção dos dados brutos.
 
-► Transform:
+× Transform:
 
 Responsável por extrair os campos necessários e transformar os dados recebidos para o formato esperado pelo pipeline.
 
-► Schema:
+× Schema:
 
 Responsável pela validação e padronização da estrutura dos dados antes da persistência.
 
-► Load:
+× Load:
 
 Responsável por inserir os dados processados no banco de dados através do SQLAlchemy.
 
-► Estrutura do projeto:
+- Estrutura do projeto:
 
-Pokemon_Pipeline/
+Pokemon-ETL-Pipeline/
 │
 ├── src/
 │   ├── config/
@@ -123,47 +123,44 @@ Pokemon_Pipeline/
 ├── uv.lock
 └── README.md
 
+- Organização das responsabilidades:
+Diretório	          Responsabilidade
+config/	            Configurações da aplicação, banco e logging
+extract/	          Extração dos dados da API
+transform/	        Transformação dos dados
+schemas/	          Validação e definição dos contratos de dados
+models/	            Modelos utilizados pelo SQLAlchemy
+load/	              Persistência dos dados no banco
+utils/	            Funções auxiliares
+tests/	            Estrutura destinada aos testes automatizados
+logs/	              Arquivos de log da execução
 
-► Organização das responsabilidades:
-
-Diretório	               Responsabilidade
-config/	                   Configurações da aplicação, banco e logging
-extract/	               Extração dos dados da API
-transform/	               Transformação dos dados
-schemas/	               Validação e definição dos contratos de dados
-models/	                   Modelos utilizados pelo SQLAlchemy
-load/	                   Persistência dos dados no banco
-utils/	                   Funções auxiliares
-tests/	                   Testes automatizados
-logs/	                   Arquivos de log da execução
-
-
-► Tecnologias utilizadas:
+- Tecnologias utilizadas:
 
 × Python
 × Requests
 × Pydantic
 × SQLAlchemy
-× PostgreSQL
+× SQLite
 × python-dotenv
 × uv
 × Logging
-
+× Logging
 
 O pipeline possui um sistema de logging para acompanhar a execução tanto pelo terminal quanto através de um arquivo persistente.
 
 Os logs registram informações relacionadas às principais etapas do pipeline, incluindo:
 
-- Início da execução;
-- Geração do identificador;
-- Início e conclusão da extração;
-- Transformação dos dados;
-- Validação do schema;
-- Carga no banco;
-- Erros e exceções;
-- Continuidade das execuções.
+Início da execução;
+Geração do identificador;
+Início e conclusão da extração;
+Transformação dos dados;
+Validação do schema;
+Carga no banco;
+Erros e exceções;
+Continuidade das execuções.
 
-► Os registros são armazenados em:
+Os registros são armazenados em:
 
 logs/pipeline.log
 
@@ -171,33 +168,31 @@ Além do registro em arquivo, os logs também são enviados para o terminal atra
 
 O tratamento de exceções utiliza logging para preservar o contexto do erro e seu traceback, facilitando a identificação de problemas durante a execução.
 
-
-► Tratamento de erros:
+Tratamento de erros
 
 As principais operações do pipeline possuem tratamento de exceções.
 
 Erros ocorridos durante uma execução são registrados através de logs e não interrompem necessariamente o processo contínuo do pipeline.
 
-► Exemplo:
+- Exemplo:
 
 Extract
    |
    X
-erro
+Erro
    |
    v
 logging.exception()
    |
    v
-aguarda 5 segundos
+Aguarda 5 segundos
    |
    v
-nova execução
+Nova execução
 
 Essa abordagem foi utilizada para praticar um comportamento mais próximo de processos de dados que precisam continuar executando mesmo quando uma determinada execução apresenta falha.
 
-
-► Execução:
+- Execução:
 
 × Instale as dependências utilizando o uv:
 
@@ -211,95 +206,92 @@ uv run python src/main.py
 
 O pipeline executa o processo continuamente, gerando um novo identificador e realizando uma nova execução a cada 5 segundos.
 
-Para interromper a execução:
+× Para interromper a execução:
 
 Ctrl + C
 
 
-► Conceitos praticados:
+- Conceitos praticados:
 
-Este projeto foi desenvolvido principalmente como exercício de aprendizado e prática dos seguintes conceitos:
+Este projeto foi desenvolvido principalmente como exercício de aprendizado e prática dos seguintes conceitos.
 
-Engenharia de Dados:
-
-    × Pipeline ETL;
-    × API como fonte de dados;
-    × Extração de dados;
-    × Transformação de dados;
-    × Validação;
-    × Persistência em banco de dados;
-    × Separação entre source, processamento e destination.
-
-Desenvolvimento:
-
-    × Modularização;
-    × Separação de responsabilidades;
-    × Tratamento de exceções;
-    × Logging;
-    × Configuração através de variáveis de ambiente;
-    × Type hints;
-    × Organização de código;
-    × ORM;
-    × Validação de dados;
-    × Estruturação de projeto Python.
-    × Boas práticas
+ Engenharia de Dados
+ Pipeline ETL;
+ API como fonte de dados;
+ Extração de dados;
+ Transformação de dados;
+ Validação;
+ Persistência em banco de dados;
+ Separação entre source, processamento e destination.
+ Desenvolvimento
+ Modularização;
+ Separação de responsabilidades;
+ Tratamento de exceções;
+ Logging;
+ Configuração através de variáveis de ambiente;
+ Type hints;
+ Organização de código;
+ ORM;
+ Validação de dados;
+ Estruturação de projeto Python;
+ Boas práticas de desenvolvimento.
 
 A estrutura foi construída deliberadamente de forma modular para evitar que toda a lógica do pipeline fique concentrada em um único arquivo.
 
 O main.py atua principalmente como orquestrador das etapas:
 
 ID Generator
-     ↓
+     |
+     v
 Extract
-     ↓
+     |
+     v
 Transform
-     ↓
+     |
+     v
 Schema Validation
-     ↓
+     |
+     v
 Load
 
 Essa separação permite que cada componente possa evoluir independentemente e facilita a manutenção e os testes.
 
+- Testes:
 
-► Testes:
-
-O projeto possui estrutura destinada à implementação de testes automatizados.
+O projeto possui uma estrutura destinada à implementação de testes automatizados.
 
 A intenção é utilizar os testes para validar individualmente componentes do pipeline, evitando depender exclusivamente da execução completa do ETL para identificar problemas.
 
 Entre os componentes que podem ser testados estão:
 
-× Geração de IDs;
-× Extração;
-× Transformação;
-× Validação dos schemas;
-× Carga dos dados.
-× Próximos passos
+Geração de IDs;
+Extração;
+Transformação;
+Validação dos schemas;
+Carga dos dados.
+Próximos passos
 
 Este projeto representa uma implementação inicial de um pipeline ETL baseado em API.
 
-A estrutura será utilizada como referência para os próximos projetos do laboratório de Engenharia de Dados, nos quais serão explorados diferentes tipos de sources, formatos de dados, destinos e ferramentas de processamento.
+A estrutura será utilizada como referência para os próximos projetos do Laboratório de Aprendizado de Engenharia de Dados, nos quais serão explorados diferentes tipos de sources, formatos de dados, destinos e ferramentas de processamento.
 
 Entre os próximos cenários estão:
 
-× Extração a partir de bancos de dados;
-× Processamento de arquivos Parquet;
-× Diferentes estratégias de ingestão;
-× Pipelines incrementais;
-× Testes automatizados;
-× Orquestração com Airflow;
-× Transformações com dbt;
-× Docker;
-× Data Lake;
-× Processamento distribuído;
-× Monitoramento e observabilidade.
-
-► Conclusão:
+Extração a partir de bancos de dados;
+Processamento de arquivos Parquet;
+Diferentes estratégias de ingestão;
+Pipelines incrementais;
+Testes automatizados;
+Orquestração com Airflow;
+Transformações com dbt;
+Docker;
+Data Lake;
+Processamento distribuído;
+Monitoramento e observabilidade.
+Conclusão
 
 O projeto foi desenvolvido como uma etapa prática de aprendizado para consolidar uma estrutura base de desenvolvimento de pipelines de dados.
 
 Mais do que o domínio de uma API específica, o objetivo foi praticar a construção de um ETL organizado, modular, observável e preparado para evolução.
 
-A arquitetura adotada servirá como base para projetos posteriores com diferentes fontes, ferramentas e estratégias de processamento.##   P o k e m o n - E T L - P i p e l i n e  
- #   P o k e m o n - E T L - P i p e l i n e  
- 
+A arquitetura adotada servirá como base para projetos posteriores com diferentes fontes, ferramentas e estratégias de processamento.

@@ -7,7 +7,12 @@ authors = [
     { name = "Pedro", email = "pedro.h.s.p@hotmail.com" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "pydantic>=2.13.5",
+    "python-dotenv>=1.2.3",
+    "requests>=2.34.2",
+    "sqlalchemy>=2.1.1",
+]
 
 [project.scripts]
 pokemon-pipeline = "pokemon_pipeline:main"

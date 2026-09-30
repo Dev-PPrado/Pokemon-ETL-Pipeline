@@ -300,4 +300,5 @@ O projeto foi desenvolvido como uma etapa prática de aprendizado para consolida
 
 Mais do que o domínio de uma API específica, o objetivo foi praticar a construção de um ETL organizado, modular, observável e preparado para evolução.
 
-A arquitetura adotada servirá como base para projetos posteriores com diferentes fontes, ferramentas e estratégias de processamento.
+A arquitetura adotada servirá como base para projetos posteriores com diferentes fontes, ferramentas e estratégias de processamento.#   P o k e m o n - E T L - P i p e l i n e  
+ 

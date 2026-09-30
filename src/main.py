@@ -1,42 +1,49 @@
+import logging
+import time
+
+from config.logging import setup_logging
 from extract.pokemon_api import fetch_pokemon_data
 from transform.pokemon import transform_pokemon
 from schemas.pokemon import PokemonSchema
 from load.pokemon_db import add_pokemon_to_db
 from utils.id_generator import generate_pokemon_id
 
-import logging
-from config.database import init_db
-from config.logging import setup_logging
 
 setup_logging()
 
 logger = logging.getLogger(__name__)
 
+
 def main():
 
-    init_db()
-
     logger.info("Starting Pokemon ETL pipeline")
-    
-    pokemon_id = generate_pokemon_id()
 
-    logger.info("Generated Pokemon ID: %s", pokemon_id)
+    while True:
 
-    raw_data = fetch_pokemon_data(pokemon_id)
+        try:
+            pokemon_id = generate_pokemon_id()
 
-    transformed_data = transform_pokemon(raw_data)
+            raw_data = fetch_pokemon_data(pokemon_id)
 
-    pokemon_schema = PokemonSchema(**transformed_data)
+            transformed_data = transform_pokemon(raw_data)
 
-    pokemon = add_pokemon_to_db(pokemon_schema)
+            pokemon_schema = PokemonSchema(**transformed_data)
 
-    logger.info(
-        "Pokemon loaded successfully: id=%s name=%s",
-        pokemon.id,
-        pokemon.name
-    )
+            pokemon = add_pokemon_to_db(pokemon_schema)
 
-    logger.info("Pokemon ETL pipeline finished successfully")
+            logger.info(
+                "Pokemon loaded successfully | id=%s | name=%s",
+                pokemon.id,
+                pokemon.name
+            )
+
+        except Exception:
+            logger.exception("Pokemon pipeline execution failed")
+
+        logger.info("Waiting 5 seconds before next execution")
+
+        time.sleep(5)
+
 
 if __name__ == "__main__":
     main()

@@ -21,6 +21,8 @@ O principal objetivo não é a aplicação em si, mas praticar conceitos fundame
 
 ---
 
+![Pokemon ETL Pipeline](docs/pipeline.png)
+
 ## Objetivo
 
 O objetivo deste projeto é servir como uma implementação de referência para o padrão de desenvolvimento que será utilizado nos próximos projetos de estudo de Engenharia de Dados.
@@ -33,8 +35,6 @@ Extract → Transform → Validate → Load
 A API foi escolhida como source para praticar um cenário comum em Engenharia de Dados, no qual os dados precisam ser consumidos através de uma interface externa antes de serem processados e armazenados.
 
 × Arquitetura:
-
-![Pokemon ETL Pipeline](docs/pipeline.png)
 
 O pipeline segue o fluxo:
 

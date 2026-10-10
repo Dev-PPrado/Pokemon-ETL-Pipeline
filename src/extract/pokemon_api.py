@@ -1,7 +1,7 @@
 import requests
 import logging
 
-from config.settings import POKEAPI_URL
+from config.settings import API_TIMEOUT, POKEAPI_URL
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ def fetch_pokemon_data(pokemon_id: int) -> dict:
 
         response = requests.get(
             url,
-            timeout=10
+            timeout=API_TIMEOUT
         )
 
         response.raise_for_status()

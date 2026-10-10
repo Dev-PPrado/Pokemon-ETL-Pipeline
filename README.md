@@ -25,7 +25,7 @@ flowchart LR
 | **Schema** | [`src/schemas/pokemon.py`](src/schemas/pokemon.py) | `PokemonSchema` (Pydantic) valida os campos antes da persistência. |
 | **Load** | [`src/load/pokemon_db.py`](src/load/pokemon_db.py) | Grava na tabela `pokemons` pelo modelo SQLAlchemy em [`src/models/pokemon.py`](src/models/pokemon.py). |
 
-O [`src/main.py`](src/main.py) só orquestra: chama as etapas em ordem, em loop, com uma pausa de 5 segundos entre as execuções.
+O [`src/main.py`](src/main.py) só orquestra: cria a tabela se ela ainda não existir e chama as etapas em ordem, em loop, com uma pausa de 5 segundos entre as execuções.
 
 ### Tabela `pokemons`
 
@@ -42,7 +42,7 @@ O [`src/main.py`](src/main.py) só orquestra: chama as etapas em ordem, em loop,
 - **Validação antes da carga:** os dados passam pelo `PokemonSchema` antes de chegar ao SQLAlchemy, então um registro fora do contrato não vai para o banco.
 - **Falha isolada por execução:** cada iteração roda dentro de um `try/except`. Se a API ou o banco falharem, o erro é registrado com traceback e o loop segue para a próxima execução.
 - **Logs:** cada etapa usa `logging` com o formato `data | nível | módulo | mensagem`, enviado ao terminal e ao arquivo `logs/pipeline.log`.
-- **Configuração por ambiente:** URL da API e conexão do banco vêm do `.env` (via `python-dotenv`), não do código.
+- **Configuração por ambiente:** URL da API, timeout e conexão do banco vêm do `.env` (via `python-dotenv`), não do código.
 - **Teste:** um teste com pytest verifica que `init_db()` cria a tabela `pokemons`.
 
 ## Stack
@@ -73,15 +73,11 @@ DATABASE_URL=sqlite:///src/pokemon.db
 ```
 
 ```sh
-uv run python src/main.py                                    # roda o pipeline (Ctrl + C para parar)
-PYTHONPATH=src uv run --with pytest pytest tests/            # testes
+uv run python src/main.py     # roda o pipeline (Ctrl + C para parar)
+uv run pytest                 # testes
 ```
 
-O `src/pokemon.db` do repositório já tem a tabela criada. Para usar outro banco, crie a tabela antes da primeira execução:
-
-```sh
-PYTHONPATH=src uv run python -c "import models.pokemon; from config.database import init_db; init_db()"
-```
+A tabela é criada na primeira execução, então qualquer `DATABASE_URL` aceito pelo SQLAlchemy funciona.
 
 ## Estrutura
 
@@ -105,14 +101,11 @@ PYTHONPATH=src uv run python -c "import models.pokemon; from config.database imp
 
 ## Limitações conhecidas
 
-- **Criação da tabela:** o `main.py` não chama `init_db()`. Com um banco novo, toda carga falha com `no such table: pokemons` até a tabela ser criada (comando acima).
-- **Timeout fixo:** o extract usa `timeout=10` direto no código. A variável `API_TIMEOUT` é lida, mas não é usada.
 - **Sem deduplicação:** o mesmo Pokémon pode ser sorteado mais de uma vez e é inserido de novo.
-- **pytest fora das dependências:** ele não está no `pyproject.toml`, por isso o comando usa `--with pytest`.
+- **Poucos testes:** só a criação da tabela é testada.
 
 ## Próximos passos
 
-- [ ] Chamar `init_db()` no início do pipeline
 - [ ] Testes de cada etapa (transform, schema e extract com a API simulada)
 - [ ] Carga incremental, sem repetir registros
 - [ ] Usar a mesma estrutura com outras fontes (banco de dados, arquivos Parquet)

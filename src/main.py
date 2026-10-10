@@ -1,11 +1,13 @@
 import logging
 import time
 
+from config.database import init_db
 from config.logging import setup_logging
 from extract.pokemon_api import fetch_pokemon_data
 from transform.pokemon import transform_pokemon
 from schemas.pokemon import PokemonSchema
 from load.pokemon_db import add_pokemon_to_db
+import models.pokemon  # noqa: F401  (registra a tabela no Base antes do init_db)
 from utils.id_generator import generate_pokemon_id
 
 
@@ -17,6 +19,10 @@ logger = logging.getLogger(__name__)
 def main():
 
     logger.info("Starting Pokemon ETL pipeline")
+
+    init_db()
+
+    logger.info("Database initialized")
 
     while True:
 
